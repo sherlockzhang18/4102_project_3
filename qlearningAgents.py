@@ -70,9 +70,9 @@ class QLearningAgent(ReinforcementAgent):
         
         maxQ = float('-inf')
         for action in actions:
-            qValue = self.getQValue(state,action)
-            if qValue > maxQ:
-                maxQ = qValue
+            q = self.getQValue(state,action)
+            if q > maxQ:
+                maxQ = q
                 
         return maxQ
 
@@ -88,11 +88,12 @@ class QLearningAgent(ReinforcementAgent):
         if not actions:
             return None
         
-        maxQ = self.computeValueFromQValues(state)
         bestActions = []
+        maxQ = self.computeValueFromQValues(state)
         
         for action in actions:
-            if self.getQValue(state, action) == maxQ:
+            q = self.getQValue(state,action)
+            if q == maxQ:
                 bestActions.append(action)
         
         return random.choice(bestActions)
@@ -111,15 +112,12 @@ class QLearningAgent(ReinforcementAgent):
         # Pick Action
         legalActions = self.getLegalActions(state)
         action = None
-        "*** YOUR CODE HERE ***"
-        actions = self.getLegalActions(state)
-        action = None
-        
-        if not actions:
+        "*** YOUR CODE HERE ***"        
+        if not legalActions:
             return None
         
         if util.flipCoin(self.epsilon):
-            action = random.choice(actions)
+            action = random.choice(legalActions)
         else:
             action = self.computeActionFromQValues(state)
 
@@ -136,9 +134,9 @@ class QLearningAgent(ReinforcementAgent):
         """
         "*** YOUR CODE HERE ***"
         q = self.getQValue(state, action)
-        nextStateValue = self.computeValueFromQValues(nextState)
+        nextStatevalue = self.computeValueFromQValues(nextState)
         
-        sample = reward + self.discount * nextStateValue
+        sample = reward + self.discount * nextStatevalue
         difference = sample - q
         q2 = q + self.alpha * difference
         
